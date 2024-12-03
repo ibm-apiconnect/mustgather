@@ -58,27 +58,41 @@ else
     KUBECTL="kubectl"
 fi
 
+# Function to compare versions
+version_ge() {
+    # Usage: version_ge <version1> <version2>
+    if [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n 1)" = "$2" ]; then
+        return 0  # $1 >= $2
+    else
+        return 1  # $1 < $2
+    fi
+}
+
+
 # Check if kubectl-cnp plugin is installed
 function is_kubectl_cnp_plugin {
-    if which kubectl-cnp >/dev/null; then
-        echo kubectl-cnp plugin found
+
+    REQUIRED_CNP_VERSION="1.22.4"
+
+    if which kubectl-cnp >/dev/null && CURRENT_CNP_VERSION=$(kubectl-cnp version  | grep -oE '[0-9]+\.[0-9]+\.[0-9]+') && version_ge "$REQUIRED_CNP_VERSION" "$CURRENT_CNP_VERSION"; then
+      echo kubectl-cnp plugin <= v1.22.4 found
     else
         echo -e "kubectl-cnp plugin not found"
         read -p "Download and Install kubectl-cnp plugin (y/n)? " yn
         case $yn in
             [Yy]* )
                 echo -e "Proceeding..."
-                echo -e "Executing: curl -sSfL https://github.com/EnterpriseDB/kubectl-cnp/raw/main/install.sh | sudo sh -s -- -b /usr/local/bin"
+                echo -e "Executing: curl -sSfL https://github.com/EnterpriseDB/kubectl-cnp/raw/main/install.sh | sudo sh -s -- -b /usr/local/bin v1.22.4"
                 curl -sSfL \
                     https://github.com/EnterpriseDB/kubectl-cnp/raw/main/install.sh | \
-                    sudo sh -s -- -b /usr/local/bin
+                    sudo sh -s -- -b /usr/local/bin v1.22.4
                 if [[ $? -ne 0 ]]; then
                     echo "Error installing kubectl-cnp plugin. Exiting..."
                     exit 1
                 fi
                 ;;
             [Nn]* )
-                echo -e "Exiting... please install kubectl-cnp plugin and add it to your PATH, see https://www.enterprisedb.com/docs/postgres_for_kubernetes/latest/kubectl-plugin."
+                echo -e "Exiting... please install kubectl-cnp plugin version 1.22.4 and add it to your PATH, see https://www.enterprisedb.com/docs/postgres_for_kubernetes/latest/kubectl-plugin."
                 exit 1
                 ;;
         esac
@@ -2803,3 +2817,4 @@ fi
 
 echo -e "Created [$ARCHIVE_FILE]."
 exit 0
+
