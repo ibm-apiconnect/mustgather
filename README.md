@@ -1,7 +1,7 @@
-# v10-postmortem tool: apic-mustgather
+# apic-mustgather
 
 > [!NOTE]  
-> We are transitioning to the **`apic-mustgather`** tool presented in this page. 
+> We have transitioned to the **`apic-mustgather`** tool. 
 > The `generate_postmortem.sh` and related scripts are deprecated but still available at this time, see [deprecated README](README_deprecated.md)
 
 ## Pre-Requisites
