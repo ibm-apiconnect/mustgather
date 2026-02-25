@@ -17,7 +17,7 @@
 
 1.  Download the tool using the following command:
 ```shell
-curl -L -O https://github.com/ibm-apiconnect/v10-postmortem/releases/latest/download/apic-mustgather
+curl -L -O https://github.com/ibm-apiconnect/mustgather/releases/latest/download/apic-mustgather
 ```
 2.  Add execution permissions to file using the command `chmod +x apic-mustgather`.
 3.  Run the tool using the command **`./apic-mustgather`**.
